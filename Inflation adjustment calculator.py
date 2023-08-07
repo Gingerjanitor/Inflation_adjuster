@@ -11,6 +11,7 @@ import seaborn as sns
 import datetime 
 from fredapi import Fred
 import matplotlib.pyplot as plt
+import tkinter as tk
 
 
 ######FUNCTIONS AND CLASSES#############
@@ -53,21 +54,20 @@ class pay:
         monthprior=today-datetime.timedelta(weeks=16)
 
         ###ping API
-        print(f"{self.startdate}, {self.startpay}")
         fred = Fred(api_key='48cd97443a16478ab526b8c298b2d829')
         initialinflation = fred.get_series('CPIAUCNS',startingdate,startingdateend)
         currentinflation = fred.get_series('CPIAUCNS',monthprior,today)
         
         ##calculate changes
         ###This pulls together inflation 3 months prior to the date and for january of the provided year.
-        inflationadj=(self.startpay*(currentinflation.mean()/initialinflation.mean())).round(2)
-        delta=(self.currpay-inflationadj).round(2)
-        deltapct=(((self.currpay/inflationadj)-1)*100).round(2)
+        inflationadj=(int(self.startpay)*(currentinflation.mean()/initialinflation.mean())).round(2)
+        delta=(int(self.currpay)-inflationadj).round(2)
+        deltapct=(((int(self.currpay)/inflationadj)-1)*100).round(2)
         
         #put into data frames: 
         dates=pd.to_datetime(pd.Series([startingdate, todayformat],name="dates"))
-        adjusted=pd.Series([startingpay,inflationadj], name="adjusted").astype(int)
-        unadjusted=pd.Series([startingpay, endingpay],name="unadjusted").astype(int)
+        adjusted=pd.Series([int(self.startpay),inflationadj], name="adjusted").astype(int)
+        unadjusted=pd.Series([int(self.startpay), int(self.currpay)],name="unadjusted").astype(int)
         df=pd.concat([adjusted,unadjusted],axis=1).set_index(dates)
         pd.concat([dates,df],axis=1)
         
@@ -115,20 +115,50 @@ class pay:
         
 
 
-###
-
-
 
 ###eventually these will e outmodded by the GUI.
-startingdate=getdate()
 
-startingpay,endingpay=collectdata()
+def runanalyses():
 
-user=pay(startingpay,startingdate,endingpay)
+    user=pay(e2.get(),e1.get(),e3.get())
+    
+    data, inflationadj,delta,deltapct=user.inflationadj()
+    
+    user.interpret(inflationadj,delta,deltapct)
+    
+    user.graph(data)
 
-data, inflationadj,delta,deltapct=user.inflationadj()
 
-user.interpret(inflationadj,delta,deltapct)
 
-user.graph(data)
+
+
+###
+##INTERFACE##
+master = tk.Tk()
+tk.Label(master, text="Starting year").grid(row=0)
+tk.Label(master, text="Starting salary").grid(row=1)
+tk.Label(master, text="Current salary").grid(row=2)
+
+
+
+e1 = tk.Entry(master)
+e2 = tk.Entry(master)
+e3 = tk.Entry(master)
+
+submit=tk.Button(master, text="Submit", command=runanalyses)
+submit.grid(row=4,column=1)
+
+endit=tk.Button(master,text="Quit", command=master.quit)
+endit.grid(row=4,column=0)
+e1.grid(row=0, column=1)
+e2.grid(row=1, column=1)
+e3.grid(row=2, column=1)
+
+
+master.mainloop()
+
+####
+
+
+
 
