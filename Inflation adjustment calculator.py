@@ -13,6 +13,16 @@ from fredapi import Fred
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
+from urllib.error import URLError
+
+
+
+###Planned features:
+#1) Allow a tick box for "use the current year", which, when unticked, will let you enter a custom end year
+#2) Allow entry of multiple years, as many as you want
+#3) Add an option for a person taking a pay cut to generate an email template.
+#4) Get it to upen the window in the middle of the screen both times.
+#5) Log and store data entries, present a summary of those results.
 
 class inflation_app:
     ##when initialized, establish the GUI
@@ -36,6 +46,8 @@ class inflation_app:
         self.worddate=tk.Label(master,text="The year entered has non-numeric characters",justify="center", fg="red")
         self.badpay=tk.Label(master,text="The pay values must be numeric", \
                  justify="center", fg="red")
+        self.timeout=tk.Label(master,text="There was a server error. Try again.", justify="center", fg="red")
+
         
         #entry fields +their locations
         self.e1 = tk.Entry(master)
@@ -54,6 +66,7 @@ class inflation_app:
         print(self.e1.get())
         
     def checkdate(self):
+        self.timeout.grid_forget()
         self.badpay.grid_forget()
         self.worddate.grid_forget()
         self.baddate.grid_forget()
@@ -65,7 +78,7 @@ class inflation_app:
             self.startdate=int(self.e1.get())
             
         except ValueError:
-            self.worddate.grid(row=6,column=0, columnspan = 4)
+
             error=True
             return error
         else:
@@ -119,10 +132,23 @@ class inflation_app:
         monthprior=today-datetime.timedelta(weeks=16)
 
         ###ping API
-        fred = Fred(api_key='API')
-        initialinflation = fred.get_series('CPIAUCNS',startingdate,startingdateend)
-        currentinflation = fred.get_series('CPIAUCNS',monthprior,today)
-        
+        fred = Fred(api_key='48cd97443a16478ab526b8c298b2d829')
+        try:
+            initialinflation = fred.get_series('CPIAUCNS',startingdate,startingdateend)
+        except URLError:
+            try: 
+                initialinflation = fred.get_series('CPIAUCNS',startingdate,startingdateend)
+            except URLError:
+                self.timeout.grid(row=6,column=0, columnspan = 4)
+
+        try:
+            currentinflation = fred.get_series('CPIAUCNS',monthprior,today)
+        except URLError: 
+            try:
+                currentinflation = fred.get_series('CPIAUCNS',monthprior,today)
+            except:
+                self.timeout.grid(row=6,column=0, columnspan = 4)
+
         ##calculate changes
         ###This pulls together inflation 3 months prior to the date and for january of the provided year.
         inflationadj=(int(self.startpay)*(currentinflation.mean()/initialinflation.mean())).round(2)
