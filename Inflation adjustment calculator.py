@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Aug  3 22:26:27 2023
+Created on Mon Aug  7 22:38:52 2023
 
 @author: Matt0
 """
@@ -13,37 +13,100 @@ from fredapi import Fred
 import matplotlib.pyplot as plt
 import tkinter as tk
 
+class inflation_app:
+    ##when initialized, establish the GUI
+    def __init__(self ,master):
+        self.master=master
+    #establish and place startup labels
+        self.instruct=tk.Label(master,text="Please enter your relevant pay info",justify="center")
+        self.instruct.grid(row=1,column=0, columnspan = 4)
+        
+        self.askdate=tk.Label(master, text="Starting year:")
+        self.askdate.grid(row=2, column=1)
+        
+        self.askstartpay=tk.Label(master, text="Starting salary $")
+        self.askstartpay.grid(row=3,column=1)
+        
+        self.askcurrpay=tk.Label(master, text="Current salary $")
+        self.askcurrpay.grid(row=4,column=1)
+        
+        #Error labels for call later
+        self.baddate=tk.Label(master,text="The year provided is invalid", justify="center", fg="red")
+        self.worddate=tk.Label(master,text="The year entered has non-numeric characters",justify="center", fg="red")
+        self.badpay=tk.Label(master,text="The pay values must be numeric", \
+                 justify="center", fg="red")
+        
+        #entry fields +their locations
+        self.e1 = tk.Entry(master)
+        self.e1.grid(row=2,column=2, columnspan = 2)
+        self.e2 = tk.Entry(master)
+        self.e2.grid(row=3,column=2, columnspan = 2)
+        self.e3 = tk.Entry(master)
+        self.e3.grid(row=4,column=2, columnspan = 2)
+        
+        #buttons
+        self.submit=tk.Button(master, text="Submit", command=self.mainscript).grid(row=7,column=0, columnspan = 2,pady=15, padx=5, )
+        
+        self.endit=tk.Button(master,text="Quit", command=master.destroy,).grid(row=7,column=2, columnspan = 2,pady=15, padx=5,sticky="e")
 
-######FUNCTIONS AND CLASSES#############
-def getdate():
-    startingyear=int(input("\n What year did you start working at your current employer?"))
-    while (1930>startingyear) or (startingyear>datetime.date.today().year):
-        startingyear=int(input("\nYou must enter your start year, between 1930 and 2023.  "))
-    return startingyear
+    def showit(self):
+        print(self.e1.get())
+        
+    def checkdate(self):
+        self.badpay.grid_forget()
+        self.worddate.grid_forget()
+        self.baddate.grid_forget()
+        try:
+            self.badpay.grid_forget()
+            self.worddate.grid_forget()
+            self.baddate.grid_forget()
+            
+            self.startdate=int(self.e1.get())
+            
+        except ValueError:
+            self.worddate.grid(row=6,column=0, columnspan = 4)
+            error=True
+            return error
+        else:
+            self.worddate.grid_forget()
+            if (1930>self.startdate) or (self.startdate>datetime.date.today().year):
+                self.baddate.grid(row=6,column=0, columnspan = 4)
+                error=True
+                return error
+            else:
+                self.baddate.grid_forget()
+                
+    def checkpay(self):
+        try:
+            self.worddate.grid_forget()
+            self.baddate.grid_forget()
+            self.startpay=int(self.e2.get().replace('$',"").replace(',',""))
+            self.currpay=int(self.e3.get().replace('$',"").replace(',',""))
+            return self.startpay, self.currpay
+        
+        except (TypeError,ValueError):
+            self.badpay.grid(row=6,column=0, columnspan = 4)
+            return None, None
 
-    
-
-def checkpay(pay):
-    pay=pay.replace('$',"")
-    pay=pay.replace(',',"")
-    while pay.isnumeric()==False:
-            pay=input("\nThe pay needs to be entered as just the number, no words or symbols.  ")
-    return pay
-
-def collectdata():
-    startingpay=int(checkpay(input("\n What was your annual salary when you started?  ")))
-    endingpay=int(checkpay(input("\n What is your current annual salary?  ")))
-    return startingpay,endingpay
-
-
-
-class pay:
-    def __init__(self,startpay,startdate,currpay):
-        self.startpay=startpay
-        self.startdate=startdate
-        self.currpay=currpay
-    
-    def inflationadj(self):
+        else:
+            self.badpay.grid_forget()
+            return self.startpay,self.currpay
+        
+    def mainscript(self):
+        error=self.checkdate()
+        if error==True:
+            return
+        else:
+            startpay, currpay=self.checkpay()
+        if startpay==None:
+            return
+        else:
+            print("it worked! Sending to the calculator")
+            df,inflationadj,delta,deltapct=self.inflation_adj()
+            self.interpret(inflationadj, delta,deltapct)
+            self.graph(df)
+        
+    def inflation_adj(self):
         ###derive appropriate years:
         startingdate=str(self.startdate)+"/1/1"
         startingdateend=str(self.startdate)+"/3/1"
@@ -54,7 +117,7 @@ class pay:
         monthprior=today-datetime.timedelta(weeks=16)
 
         ###ping API
-        fred = Fred(api_key='48cd97443a16478ab526b8c298b2d829')
+        fred = Fred(api_key='APIKEY')
         initialinflation = fred.get_series('CPIAUCNS',startingdate,startingdateend)
         currentinflation = fred.get_series('CPIAUCNS',monthprior,today)
         
@@ -71,8 +134,9 @@ class pay:
         df=pd.concat([adjusted,unadjusted],axis=1).set_index(dates)
         pd.concat([dates,df],axis=1)
         
+        print("Yippee!")
         return df,inflationadj,delta,deltapct
-        
+    
     def interpret(self,inflationadj, delta,deltapct):
         print(f"""\n\nBack in {self.startdate} you earned ${self.startpay}. If we converted that into {datetime.date.today().year} dollars, you would be making ${inflationadj} dollars! How's the {self.currpay} that you're earning look now?""")
     
@@ -81,7 +145,7 @@ class pay:
     
         elif delta>0:
             print(f"\n Compared to when you were hired, you've actually gotten a raise! Yay! Compared to when you were hired,you're making ${delta} or %{deltapct} more than when you were hired. Still, think how many years of experience you've got- I hope it's commensurate!")
-
+    
     def graph(self,df):
                 
         sns.set_theme()
@@ -112,53 +176,7 @@ class pay:
          color = 'black') # set colour of line
         
         plt.show()
-        
 
-
-
-###eventually these will e outmodded by the GUI.
-
-def runanalyses():
-
-    user=pay(e2.get(),e1.get(),e3.get())
-    
-    data, inflationadj,delta,deltapct=user.inflationadj()
-    
-    user.interpret(inflationadj,delta,deltapct)
-    
-    user.graph(data)
-
-
-
-
-
-###
-##INTERFACE##
-master = tk.Tk()
-tk.Label(master, text="Starting year").grid(row=0)
-tk.Label(master, text="Starting salary").grid(row=1)
-tk.Label(master, text="Current salary").grid(row=2)
-
-
-
-e1 = tk.Entry(master)
-e2 = tk.Entry(master)
-e3 = tk.Entry(master)
-
-submit=tk.Button(master, text="Submit", command=runanalyses)
-submit.grid(row=4,column=1)
-
-endit=tk.Button(master,text="Quit", command=master.quit)
-endit.grid(row=4,column=0)
-e1.grid(row=0, column=1)
-e2.grid(row=1, column=1)
-e3.grid(row=2, column=1)
-
-
-master.mainloop()
-
-####
-
-
-
-
+runit=tk.Tk()
+gui=inflation_app(runit)
+runit.mainloop()
