@@ -11,6 +11,7 @@ import seaborn as sns
 import datetime 
 from fredapi import Fred
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
 
 class inflation_app:
@@ -45,9 +46,9 @@ class inflation_app:
         self.e3.grid(row=4,column=2, columnspan = 2)
         
         #buttons
-        self.submit=tk.Button(master, text="Submit", command=self.mainscript).grid(row=7,column=0, columnspan = 2,pady=15, padx=5, )
+        self.submit=tk.Button(master, text="Submit", command=self.mainscript).grid(row=7,column=2, columnspan = 2,pady=15, padx=5, )
         
-        self.endit=tk.Button(master,text="Quit", command=master.destroy,).grid(row=7,column=2, columnspan = 2,pady=15, padx=5,sticky="e")
+        self.endit=tk.Button(master,text="Quit", command=master.destroy,).grid(row=7,column=0, columnspan = 2,pady=15, padx=5,sticky="e")
 
     def showit(self):
         print(self.e1.get())
@@ -103,8 +104,9 @@ class inflation_app:
         else:
             print("it worked! Sending to the calculator")
             df,inflationadj,delta,deltapct=self.inflation_adj()
-            self.interpret(inflationadj, delta,deltapct)
-            self.graph(df)
+            
+            self.report_results(inflationadj, delta,deltapct,df)
+            
         
     def inflation_adj(self):
         ###derive appropriate years:
@@ -117,7 +119,7 @@ class inflation_app:
         monthprior=today-datetime.timedelta(weeks=16)
 
         ###ping API
-        fred = Fred(api_key='APIKEY')
+        fred = Fred(api_key='API')
         initialinflation = fred.get_series('CPIAUCNS',startingdate,startingdateend)
         currentinflation = fred.get_series('CPIAUCNS',monthprior,today)
         
@@ -137,21 +139,40 @@ class inflation_app:
         print("Yippee!")
         return df,inflationadj,delta,deltapct
     
-    def interpret(self,inflationadj, delta,deltapct):
-        print(f"""\n\nBack in {self.startdate} you earned ${self.startpay}. If we converted that into {datetime.date.today().year} dollars, you would be making ${inflationadj} dollars! How's the {self.currpay} that you're earning look now?""")
-    
+        
+    def report_results(self, inflationadj, delta,deltapct, df):
+        second_window = tk.Toplevel(runit)
+        second_window.title("Results")
+        
+        # Add text to the second window
+        
+        #header=tk.Label(second_window,text="RESULTS:")
+        #header.grid(row=0,column=0,columnspan=5)
+        
+        #make a general summary of the results
+        general=tk.Label(second_window, text=f"""\n\nBack in {self.startdate} you earned ${self.startpay}. If we converted that into {datetime.date.today().year} dollars, \n you would be making ${inflationadj} dollars! How's the ${self.currpay} that you're earning look now?""")
+        
+        general.grid(row=1,column=1, columnspan=3)                 
+        
+        #customize the feedback
         if delta<0:
-            print(f"\n Compared to when you were hired, you've taken what amounts to a ${delta} or %{deltapct} pay cut.")
-    
+            tailored=tk.Label(second_window,text=f"\n Compared to when you were hired, you've taken what amounts to a ${delta} or a %{deltapct} reduction in your buying power compared to when you were hired.")
+            tailored.grid(row=2,column=1,columnspan=3)
         elif delta>0:
-            print(f"\n Compared to when you were hired, you've actually gotten a raise! Yay! Compared to when you were hired,you're making ${delta} or %{deltapct} more than when you were hired. Still, think how many years of experience you've got- I hope it's commensurate!")
-    
-    def graph(self,df):
-                
+            tailored=tk.Label(second_window,text=f"\n Compared to when you were hired, you've actually gotten a raise! Yay! \n Compared to when you were hired,you're making ${delta} or %{deltapct} more than when you were hired.\n Still, think how many years of experience you've got- I hope it's commensurate!")
+            tailored.grid(row=2,column=1,columnspan=3)
+        
+        sayok=tk.Button(second_window,text="OK",command=second_window.destroy)
+        sayok.grid(row=5, column=1,columnspan=3, rowspan=2, padx=15, pady=15)
+        
+        
+        ####Graph:
+            
         sns.set_theme()
         
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(9, 5))
         
+        #init the two plots
         line1=sns.lineplot(df,x=df.index,
                            y=df['adjusted'], 
                            label="What your starting pay is now worth")
@@ -175,7 +196,9 @@ class inflation_app:
          s = '${:.0f}'.format(y), # data label, formatted to ignore decimals
          color = 'black') # set colour of line
         
-        plt.show()
+        canvas=FigureCanvasTkAgg(plt.gcf(), master=second_window)
+        canvas.draw()
+        canvas.get_tk_widget().grid(row=3,column=1,columnspan=3)
 
 runit=tk.Tk()
 gui=inflation_app(runit)
