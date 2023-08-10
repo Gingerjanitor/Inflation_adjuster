@@ -10,19 +10,15 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import numpy as np
-
 import datetime
 
+
 class mixin:
-    #def __init__(self, inflationadj,delta,deltapct,df,runit):
-    def report_results(self, inflationadj, delta,deltapct, df,runit):
+    def report_results(self, inflationadj, delta,deltapct, df, runit):
         second_window = tk.Toplevel(runit)
         second_window.title("Results")
         
         # Add text to the second window
-        
-        #header=tk.Label(second_window,text="RESULTS:")
-        #header.grid(row=0,column=0,columnspan=5)
         
         #make a general summary of the results
         general=tk.Label(second_window, text=f"""\n\nBack in {self.startdate} you earned ${self.startpay}. If we converted that into {datetime.date.today().year} dollars, \n you would be making ${inflationadj} dollars! How's the ${self.currpay} that you're earning look now?""")
