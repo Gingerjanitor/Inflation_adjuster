@@ -51,5 +51,6 @@ class inflation_app(validators.mixin,calc_inflation.mixin, report_results.mixin,
 
 
 runit=tk.Tk()
+runit.eval('tk::PlaceWindow . center')
 gui=inflation_app(runit)
 runit.mainloop()
