@@ -23,7 +23,7 @@ class mixin:
         monthprior=today-datetime.timedelta(weeks=16)
     
         ###ping API
-        fred = Fred(api_key='APIKEY')
+        fred = Fred(api_key='48cd97443a16478ab526b8c298b2d829')
         try:
             initialinflation = fred.get_series('CPIAUCNS',startingdate,startingdateend)
         except URLError:

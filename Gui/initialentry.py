@@ -4,7 +4,10 @@ Created on Thu Aug 10 15:13:35 2023
 
 @author: Matt0
 """
+
 import tkinter as tk
+
+
 class mixin:
     def data_entry(self, master): 
         self.master=master
