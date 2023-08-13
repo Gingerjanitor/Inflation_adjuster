@@ -28,8 +28,24 @@ for box in entrycount:
 ###must make it so that it doesn't eat up the pre-existing rows, just adds a new
 #boxcount=4
 
+
+###so this uses a row counter that logs the info for each row. 
+#
+#{entry name: Entry value}
+
 def add_row():
+    #keep a log of the rows, starting with the initial ones
+    ##take current row position
+    
+    #add 1 ti
+    
+    
+    
+    
+    
+    
     entrycount.append(max(entrycount)+1)
+    # Iterate across entry list- has one been created let? across entry boxes
     for box in entrycount[1:]:
         if box not in rows:
             loc=box+2
