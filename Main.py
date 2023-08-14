@@ -33,10 +33,15 @@ class inflation_app(validators.mixin,calc_inflation.mixin, report_results.mixin,
     def __init__(self ,master):
         self.master=master
         self.data_entry(master)
-                
-
+        self.yearlist=[]
+        self.indexlog=[]
+        self.submissioncount=-1
     def mainscript(self):
         error=self.checkdate()
+        #janky, but this ensures lastvalue is always added at the very end of everything.
+        #self.yearlist.append(self.lastvalue)
+        #self.indexlog.append(self.lastindex)
+        
         if error==True:
             return
         else:

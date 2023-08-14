@@ -3,6 +3,12 @@ import tkinter as tk
 class RowManips:
     def add_row(self):
         #self.master=master
+        #add the remove button if this is the first add:
+        if self.rownumber==0:
+            self.removebutton=tk.Button(self.master,text="Remove a year", command=self.remove_row)
+            self.removebutton.grid(row=self.rowloc+98, column=2, columnspan=1, pady=15)
+
+        
         self.rownumber+=1
         self.rowloc+=1
         print(f"add {self.rownumber}")
@@ -17,6 +23,9 @@ class RowManips:
         self.newpayentry=tk.Entry(self.master)
         self.payentryfields[self.rownumber]=self.newpayentry
         self.newpayentry.grid(row=self.rowloc, column=2,pady=3)
+        
+        #make teh remove button visible:
+        
     
     def remove_row(self):
         print(f"try to remove {self.rownumber}")
@@ -36,4 +45,8 @@ class RowManips:
                 del self.payentryfields[self.rownumber]
                 self.rownumber-=1
                 self.rowloc-=1
-
+                
+            if self.rownumber==0:
+                print(self.removebutton)
+                print("want to remove the button")
+                self.removebutton.destroy()

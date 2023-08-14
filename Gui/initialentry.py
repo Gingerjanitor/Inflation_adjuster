@@ -39,7 +39,8 @@ class mixin(row_manips.RowManips):
         self.badpay=tk.Label(master,text="The pay values must be numeric", \
                  justify="center", fg="red")
         self.timeout=tk.Label(master,text="There was a server error. Try again.", justify="center", fg="red")
-    
+        self.outofsequence=tk.Label(master,text="The years must be in order", \
+             justify="center", fg="red")
         
         #####A tracker for the locations for both:
         self.payentryfields={}
@@ -51,18 +52,24 @@ class mixin(row_manips.RowManips):
         self.e1 = tk.Entry(master)
         self.e1.insert(0, "(--Start year--)")
         self.e1.grid(row=3,column=0,pady=3)
+
+        self.e1.bind('<FocusIn>', lambda event: self.remove_initial_text(self.e1))
         self.yearentryfields[self.rownumber]=self.e1
         
         #start pay entry
         self.e2 = tk.Entry(master)
         self.e2.insert(0,"(--Starting pay--)")
         self.e2.grid(row=3,column=2,pady=3)
+        self.e2.bind('<FocusIn>', lambda event: self.remove_initial_text(self.e2))
+
         self.payentryfields[self.rownumber]=self.e2
         
         #current pay entry
         self.e3 = tk.Entry(master)
         self.e3.insert(0,"(--Current pay--)")
         self.e3.grid(row=self.rowloc+25,column=2, pady=3)
+        self.e3.bind('<FocusIn>', lambda event: self.remove_initial_text(self.e3))
+
         
         #setting the rownumber absurdly high so that it doesn't get overwritten by new rows
         self.payentryfields[self.rownumber+100]=self.e3
@@ -78,9 +85,16 @@ class mixin(row_manips.RowManips):
         self.rowadd=tk.Button(master,text="Add another year", command=self.add_row).grid(row=self.rowloc+98, column=0, columnspan=1, pady=15)
         
         ###maybe make this only show up if row number >0?
-        self.rowadd=tk.Button(master,text="Remove a year", command=self.remove_row).grid(row=self.rowloc+98, column=2, columnspan=1, pady=15)
+        #self.rowadd=tk.Button(master,text="Remove a year", command=self.remove_row).grid(row=self.rowloc+98, column=2, columnspan=1, pady=15)
         
-    
+    def remove_initial_text(self, activated):
+        if activated.get() == "(--Start year--)":
+            activated.delete(0, tk.END)
+        if activated.get() == "(--Starting pay--)":
+            activated.delete(0, tk.END)
+        if activated.get() == "(--Current pay--)":
+            activated.delete(0, tk.END)
+            
     # def add_row(self, master):
     #     #self.master=master
     #     self.rownumber+=1
