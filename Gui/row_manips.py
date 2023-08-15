@@ -34,6 +34,9 @@ class RowManips:
             if self.rownumber>0:
                 print("removing {self.rownumber}")
                 
+                
+                               
+                
                 ##delete the date field
                 toremove=self.yearentryfields[self.rownumber]
                 toremove.destroy()
@@ -43,6 +46,26 @@ class RowManips:
                 toremove=self.payentryfields[self.rownumber]
                 toremove.destroy()
                 del self.payentryfields[self.rownumber]
+               
+                
+                #remove the stored data from the dictionaries and list
+
+                print(f'yearlist has {self.yearlist}, want to remote {self.cleandate[self.rownumber]}')
+                if self.cleandate[self.rownumber] in self.yearlist:
+                    self.yearlist.remove(self.cleandate[self.rownumber])
+                if self.rownumber in self.cleandate.keys():
+                    self.cleandate.pop(self.rownumber)
+                
+                #ditto for pay info
+                if self.rownumber in self.cleanpay.keys():
+                    self.cleanpay.pop(self.rownumber)
+                if self.rownumber in self.payentryfields.keys():
+                    self.payentryfields.pop(self.rownumber)
+                #allowing the key error through since it probably means they left a entry field blank, then deleted.
+                #except KeyError:
+                #    pass
+                
+                #decrement
                 self.rownumber-=1
                 self.rowloc-=1
                 

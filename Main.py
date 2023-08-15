@@ -22,11 +22,12 @@ import Gui.initialentry as initialentry
 import Gui.resultswindow as resultswindow
 
 ###Planned features:
-#1) Allow a tick box for "use the current year", which, when unticked, will let you enter a custom end year
+    
 #2) Allow entry of multiple years, as many as you want
 #3) Add an option for a person taking a pay cut to generate an email template.
 #4) Get it to upen the window in the middle of the screen both times.
 #5) Log and store data entries, present a summary of those results.
+#6) a reset all button that restarts main
 
 class inflation_app(validators.mixin,calc_inflation.mixin, report_results.mixin, initialentry.mixin, resultswindow.mixin):
     ##when initialized, establish the GUI
@@ -34,19 +35,22 @@ class inflation_app(validators.mixin,calc_inflation.mixin, report_results.mixin,
         self.master=master
         self.data_entry(master)
         self.yearlist=[]
-        self.indexlog=[]
         self.submissioncount=-1
+        self.error=False
+        self.cleanpay={}
+        self.cleandate={}
+        
     def mainscript(self):
         error=self.checkdate()
         #janky, but this ensures lastvalue is always added at the very end of everything.
         #self.yearlist.append(self.lastvalue)
         #self.indexlog.append(self.lastindex)
-        
+        print(self.yearlist)
         if error==True:
             return
         else:
-            startpay, currpay=self.checkpay()
-        if startpay==None:
+             self.checkpay()
+        if self.error==True:
             return
         else:
             print("it worked! Sending to the calculator")
