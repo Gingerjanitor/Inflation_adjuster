@@ -15,6 +15,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
 from urllib.error import URLError
 
+import Funcs.Prep_data as prep_data
 import Funcs.validators as validators
 import Funcs.calc_inflation as calc_inflation
 import Funcs.report_results as report_results
@@ -29,7 +30,12 @@ import Gui.resultswindow as resultswindow
 #5) Log and store data entries, present a summary of those results.
 #6) a reset all button that restarts main
 
-class inflation_app(validators.mixin,calc_inflation.mixin, report_results.mixin, initialentry.mixin, resultswindow.mixin):
+class inflation_app(validators.mixin, 
+                    calc_inflation.mixin, 
+                    report_results.mixin, 
+                    initialentry.mixin, 
+                    resultswindow.mixin,
+                    prep_data.mixin):
     ##when initialized, establish the GUI
     def __init__(self ,master):
         self.master=master
@@ -53,7 +59,7 @@ class inflation_app(validators.mixin,calc_inflation.mixin, report_results.mixin,
         if self.error==True:
             return
         else:
-            print("it worked! Sending to the calculator")
+            self.prep_data()
             df,inflationadj,delta,deltapct=self.inflation_adj()
             
             self.report_results(inflationadj, delta,deltapct,df, self.master)

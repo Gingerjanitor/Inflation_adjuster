@@ -10,20 +10,18 @@ from fredapi import Fred
 import pandas as pd
 from urllib.error import URLError
 import requests
+import Funcs.config as config
+
 
 class mixin: 
     def inflation_adj(self):
-        ###derive appropriate years:
-        startingdate=str(self.startdate)+"/1/1"
-        startingdateend=str(self.startdate)+"/3/1"
-        #Current date
-        today=datetime.date.today()
-        todayformat=today.strftime('%m/%d/%y')
         
-        monthprior=today-datetime.timedelta(weeks=16)
+        fredkey=config.set_key()
     
+
+       # for cases in paydata:
         ###ping API
-        fred = Fred(api_key='48cd97443a16478ab526b8c298b2d829')
+        fred = Fred(api_key=fredkey)
         try:
             initialinflation = fred.get_series('CPIAUCNS',startingdate,startingdateend)
         except URLError:

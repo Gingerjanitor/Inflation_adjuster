@@ -30,6 +30,7 @@ class mixin:
             #this detects the current date, which alwys shows up in the 2nd slot of the dictionary, but must
             #appear at the end of the list later.
             if yearentry==datetime.date.today().year:
+                self.cleandate[index]=yearentry
                 continue
             #If they entered values, then added a row and more values, it would break.
             #This fixes it.
@@ -101,18 +102,43 @@ class mixin:
                     
         
     def checkpay(self):
+        print(self.payentryfields)
         for index, payentry in self.payentryfields.items():
+            
             if index in self.cleanpay.keys():
-                continue
+            
+                try: 
+                    #the values match- no point checking further..
+                    print(f"current value is {self.cleanpay[index]}, comparing to {int(payentry.get())}")
+                    
+                    if self.cleanpay[index]==int(payentry.get()):
+                        continue
+                    
+                    else:
+                        print(f"i wanna remove {self.cleanpay[index]} its different")
+                        self.cleanpay.pop(index)
+                        
+                #the index was in there, but the value is different- it's either not int, or it's changed! Run the checks again.
+                except:
+                    #remove the value from the list tracker
+                    print(f"i wanna revalidate {self.cleanpay[index]} its not int")
+                    pass
+            
             try:
                 self.worddate.grid_forget()
                 self.baddate.grid_forget()
                 pay=int(payentry.get().replace('$',"").replace(',',""))
-                self.payentryfields[index]=pay
+                
+                ##This weeds out the final value/current year entry
+               # if index==100:
+               #     self.lastpay=pay
+               # else:
+                self.cleanpay[index]=pay
             except (TypeError,ValueError):
-                self.badpay.grid(row=6,column=0, columnspan = 4)
+                self.badpay.grid(row=96,column=0, columnspan = 4)
                 self.error=True
                 
             else:
                 self.badpay.grid_forget()
-        print(self.payentryfields)
+        #self.cleanpay[100]=self.lastpay
+        print(self.cleanpay)
