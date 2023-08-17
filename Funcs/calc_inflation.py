@@ -11,17 +11,36 @@ import pandas as pd
 from urllib.error import URLError
 import requests
 import Funcs.config as config
-
+import time
 
 class mixin: 
     def inflation_adj(self):
         
         fredkey=config.set_key()
-    
-
-       # for cases in paydata:
-        ###ping API
         fred = Fred(api_key=fredkey)
+        retry=0
+        inflation=pd.DataFrame()
+        for dates in self.paydata.itertuples():
+            print(dates)
+            print(dates.pastdate)
+            print(str(dates.Index))
+            while retry<=5:
+                try:
+                    tempinflation=pd.Series(fred.get_series('CPIAUCNS',dates.pastdate,dates.Index),name="inf_"+str(dates.Index))
+                    print("got something")
+                    inflation=pd.concat([inflation,tempinflation], axis=1)
+                    print(inflation)
+                except URLError:
+                    print("failed, trying again")
+                    time.sleep(2)
+                    retry+=1
+                    
+            if retry>6:
+                self.timeout.grid(row=6,column=0, columnspan = 4)
+                return
+        print("Got through first round")
+        # for cases in paydata:
+        ###ping API
         try:
             initialinflation = fred.get_series('CPIAUCNS',startingdate,startingdateend)
         except URLError:

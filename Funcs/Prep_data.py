@@ -8,7 +8,7 @@ class mixin:
                 if index==100:
                     self.cleandate[index]=str(datetime.date.today())
                 else:
-                    newdate=str(date)+"-01-01"
+                    newdate=str(date)+"-1-1"
                     self.cleandate[index]=newdate
                     
             
@@ -19,7 +19,7 @@ class mixin:
             self.paydata.columns=["pay","date"]
             
             self.paydata['date']=pd.to_datetime(self.paydata['date'])
-            self.paydata['enddate']=self.paydata['date']-datetime.timedelta(weeks=28)
+            self.paydata['pastdate']=self.paydata['date']-datetime.timedelta(weeks=28)
             self.paydata= self.paydata.set_index('date')
             self.paydata=self.paydata.sort_index()
             
