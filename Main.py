@@ -60,7 +60,7 @@ class inflation_app(validators.mixin,
             return
         else:
             self.prep_data()
-            df,inflationadj,delta,deltapct=self.inflation_adj()
+            self.inflation_adj()
             
             self.report_results(inflationadj, delta,deltapct,df, self.master)
 

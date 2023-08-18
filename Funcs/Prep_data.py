@@ -6,7 +6,7 @@ class mixin:
         def prep_data(self):
             for index,date in self.cleandate.items():
                 if index==100:
-                    self.cleandate[index]=str(datetime.date.today())
+                    self.cleandate[index]=str(f"{datetime.date.today().year}"+"-1-1")
                 else:
                     newdate=str(date)+"-1-1"
                     self.cleandate[index]=newdate
@@ -19,7 +19,7 @@ class mixin:
             self.paydata.columns=["pay","date"]
             
             self.paydata['date']=pd.to_datetime(self.paydata['date'])
-            self.paydata['pastdate']=self.paydata['date']-datetime.timedelta(weeks=28)
+                                                                       
             self.paydata= self.paydata.set_index('date')
             self.paydata=self.paydata.sort_index()
             
