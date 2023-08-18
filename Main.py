@@ -62,7 +62,7 @@ class inflation_app(validators.mixin,
             self.prep_data()
             self.inflation_adj()
             
-            self.report_results(inflationadj, delta,deltapct,df, self.master)
+            self.report_results()
 
 
 runit=tk.Tk()

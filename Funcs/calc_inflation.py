@@ -31,7 +31,7 @@ class mixin:
                 retry+=1
                 
         self.inflationadjstart=pd.DataFrame(self.paydata['pay'][0]*(inflation/inflation[0])).round(2)
-        
+        self.inflationadjstart=self.inflationadjstart.rename(columns={0:"adjusted"})
         #merge in the adjusted pay values when the value has a pay match.
         self.paydata=pd.merge(self.paydata, self.inflationadjstart, 
                               left_on=self.paydata.index, 
@@ -43,7 +43,7 @@ class mixin:
         #difference between pay at the time and the starting pay inflation adjusted. positive values= a raise. negative= a pay cut.
         self.paydata['delta']=self.paydata['pay']-self.paydata['adjusted']
         self.paydata['deltapctstart']=((self.paydata['pay']/self.paydata['adjusted']-1)*100).round(2)
-        
+        self.paydata.set_index('date')
         print(self.paydata)
         
         print("Yippee!")

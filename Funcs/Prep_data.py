@@ -20,8 +20,9 @@ class mixin:
             
             self.paydata['date']=pd.to_datetime(self.paydata['date'])
                                                                        
-            self.paydata= self.paydata.set_index('date')
             self.paydata=self.paydata.sort_index()
             
             print(" \nIt's all ready to go captain\n")
+            self.paydata= self.paydata.set_index('date')
+
             print(self.paydata.head())
