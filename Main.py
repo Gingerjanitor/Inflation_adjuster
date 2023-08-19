@@ -45,6 +45,7 @@ class inflation_app(validators.mixin,
         self.error=False
         self.cleanpay={}
         self.cleandate={}
+        self.inflation=pd.DataFrame()
         
     def mainscript(self):
         error=self.checkdate()

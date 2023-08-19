@@ -20,17 +20,19 @@ class mixin:
         fred = Fred(api_key=fredkey)
         retry=0
         #inflation=pd.DataFrame()
-        
-        while retry<=5:
-            try:
-                inflation=fred.get_series('CPIAUCNS', self.paydata.index[0], self.paydata.index[len(self.paydata)-1],name="inflation")
-                break
-            except URLError:
-                print("failed, trying again")
-                time.sleep(2)
-                retry+=1
+        print(self.inflation)
+        if self.inflation.empty:
+            print("pinging API")
+            while retry<=5:
+                try:
+                    self.inflation=fred.get_series('CPIAUCNS', self.paydata.index[0], self.paydata.index[len(self.paydata)-1],name="inflation")
+                    break
+                except URLError:
+                    print("failed, trying again")
+                    time.sleep(2)
+                    retry+=1
                 
-        self.inflationadjstart=pd.DataFrame(self.paydata['pay'][0]*(inflation/inflation[0])).round(2)
+        self.inflationadjstart=pd.DataFrame(self.paydata['pay'][0]*(self.inflation/self.inflation[0])).round(2)
         self.inflationadjstart=self.inflationadjstart.rename(columns={0:"adjusted"})
         #merge in the adjusted pay values when the value has a pay match.
         self.paydata=pd.merge(self.paydata, self.inflationadjstart, 

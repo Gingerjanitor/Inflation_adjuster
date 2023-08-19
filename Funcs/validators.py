@@ -1,4 +1,5 @@
 import datetime
+import pandas as pd
 
 class mixin:
     def checkdate(self):
@@ -24,6 +25,8 @@ class mixin:
                     #remove the value from the list tracker
                     print(f"i wanna remove {self.cleandate[index]} its not int")
                     #this manages the chance that you added a new row, caused an error, and then corrected
+                    if index==100:
+                        continue
                     if len(self.yearlist)<=index:
                         del self.yearlist[index]
                     pass
@@ -76,11 +79,21 @@ class mixin:
                             self.yearlist.insert(index,yearentry)
                             
                             self.cleandate[index]=yearentry
+                            #nuke the data frame if we replaced the end point so the API is recalled.
+                            if index==0:
+                                self.inflation=pd.DataFrame()
+                            #check if that new bit of data is an earlier date than the current minimum
+                            print("\n checking if lower than prior date\n")
+                            print(self.cleandate[index])
+                            print(self.cleandate.values())
+
+                                
                         #if they've hit submit, but they never got current year in the list.# fringe case.
                         elif self.submissioncount>0 & (datetime.date.today().year not in self.yearlist):
                             print("trying to fix this thing")
                             self.yearlist.insert(index,yearentry)
                             self.yearlist.append(datetime.date.today().year)
+                        
                             
         ##tack on the current date at the end of the list if it's not there.
         if datetime.date.today().year not in self.yearlist:
