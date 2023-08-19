@@ -17,48 +17,41 @@ import Gui.resultswindow as resultswindow
 class mixin(resultswindow.mixin):
     def report_results(self):
        
-        
-        second_window=self.results_window(self.master, self.paydata, self.inflationadjstart)
+        #self.paydata, self.inflationadjstart
+        second_window=self.results_window(self.master)
               
         
         ####Graph:
             
         sns.set_theme()
-        
-        plt.figure(figsize=(9, 5))
+        fig,axes=plt.subplots(2,1, figsize=(8,5))
         
         #init the two plots
         line1=sns.lineplot(self.inflationadjstart,
                            x=self.inflationadjstart.index, 
                            y=self.inflationadjstart['adjusted'], 
-                           label="What your starting pay is now worth")     
+                           label="What your starting pay is now worth",
+                           ax=axes[0])     
+        line1.set(title="What you've been paid vs where you started")
+        line1.set_ylabel("Pay in $")
+        line1.xaxis.set_visible(False)
         
-        line2=sns.lineplot(self.paydata,x=self.paydata.index,
+        line2=sns.lineplot(self.paydata,x=self.paydata['date'],
                            y=self.paydata['pay'], 
                            label="What you've been getting paid",
+                           ax=axes[0],
                            marker="o")
-        plt.show()
-        
-        line3=sns.lineplot(self.paydata,x=self.paydata.index,
+        line2.legend(loc="lower right", bbox_to_anchor=(1,-.25))
+
+        line3=sns.lineplot(self.paydata,x=self.paydata['date'],
                            y=self.paydata['deltapctstart'], 
                            #Title="How much your pay has changed since hiring, inflation adjusted (%)",
-                           marker="o",)
-        
-        # line1.set_ylabel("pay")
-        # for x, y in zip(self.inflationadjstart.index, self.inflationadjstart['unadjusted']):
-        #  # the position of the data label relative to the data point can be adjusted by adding/subtracting a value from the x &/ y coordinates
-        #  plt.text(x = x, # x-coordinate position of data label
-        #  y = y-800, # y-coordinate position of data label, adjusted to be 150 below the data point
-        #  s = '${:.0f}'.format(y), # data label, formatted to ignore decimals
-        #  color = 'black') # set colour of line
-        
-        # for x, y in zip(df.index, df['adjusted']):
-        #  # the position of the data label relative to the data point can be adjusted by adding/subtracting a value from the x &/ y coordinates
-        #  plt.text(x = x, # x-coordinate position of data label
-        #  y = y-800, # y-coordinate position of data label, adjusted to be 150 below the data point
-        #  s = '${:.0f}'.format(y), # data label, formatted to ignore decimals
-        #  color = 'black') # set colour of line
+                           marker="o",
+                           label='The % your pay has changed since 2016',
+                           ax=axes[1])
+        line3.set_ylabel("% change since 2016")
+        line3.legend(loc="lower right")
         
         canvas=FigureCanvasTkAgg(plt.gcf(), master=second_window)
         canvas.draw()
-        canvas.get_tk_widget().grid(row=3,column=1,columnspan=3)
+        canvas.get_tk_widget().grid(row=1,column=2,rowspan=2)
