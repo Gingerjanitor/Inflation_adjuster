@@ -55,3 +55,4 @@ class mixin(resultswindow.mixin):
         canvas=FigureCanvasTkAgg(plt.gcf(), master=second_window)
         canvas.draw()
         canvas.get_tk_widget().grid(row=1,column=2,rowspan=2)
+        
