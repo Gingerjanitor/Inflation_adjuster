@@ -24,11 +24,10 @@ import Gui.resultswindow as resultswindow
 
 ###Planned features:
     
-#2) Allow entry of multiple years, as many as you want
-#3) Add an option for a person taking a pay cut to generate an email template.
-#4) Get it to upen the window in the middle of the screen both times.
 #5) Log and store data entries, present a summary of those results.
-#6) a reset all button that restarts main
+#6) Add a little forecast?
+#7 login and recall prior entries
+
 
 class inflation_app(validators.mixin, 
                     calc_inflation.mixin, 
