@@ -14,13 +14,14 @@ import Funcs.gen_letter as gen_letter
 class mixin:
     def results_window(self, runit):
         second_window = tk.Toplevel(runit)
+        second_window.geometry("1000x600+100-75")
         second_window.title("Results")
         
         header=tk.Label(second_window,text="Are you getting paid your worth?\n",anchor="center", font=('',20))
         header.grid(row=0, column=0,columnspan=3)
         
         # Add text to the second window
-        summarytxt = f"""\n Back in {self.paydata['date'][0].year} you earned ${self.paydata['pay'][0]}. If we converted that into {self.paydata['date'][len(self.paydata)-1].year} dollars, you would be making ${self.paydata['adjusted'][len(self.paydata)-1]}! How's the ${self.paydata['pay'][len(self.paydata)-1]} that you're earning look now?\n \n The graphs on the right show your pay over time. For the top graph, if the orange line goes over the blue line, you're making more than when you were hired. If it's below, you're making less. If they are on top of each other, you haven't actually been getting raises at all, just small inflation adjustments \n\n For the second graph, values above 0 indicate a raise relative to your start pay, values below 0 indicate a reduction in buying power."""
+        summarytxt = f"""\n Back in {self.paydata['date'][0].year} you earned ${self.paydata['pay'][0]}. If we converted that into {self.paydata['date'][len(self.paydata)-1].year} dollars, you would be making ${self.paydata['adjusted'][len(self.paydata)-1]}! Put differently, assuming you worked 40 hours a week and 50 weeks a year, you were making ${self.paydata['hourlyraw'][0]} an hour in {self.paydata['date'][0].year}. But that starting pay is now equivalent to ${self.paydata['hourlyadj'][len(self.paydata['hourlyadj'])-1]}, while your currently being paid about ${self.paydata['hourlyraw'][len(self.paydata['hourlyraw'])-1]}. How's the ${self.paydata['pay'][len(self.paydata)-1]}  that you're earning look now?\n \n The graphs on the right show your pay over time. For the top graph, if the orange line goes over the blue line, you're making more than when you were hired. If it's below, you're making less. If they are on top of each other, you haven't actually been getting raises at all, just small inflation adjustments \n\n For the second graph, values above 0 indicate a raise relative to your start pay, values below 0 indicate a reduction in buying power."""
         
 
         
@@ -37,13 +38,14 @@ class mixin:
         summary=tk.Text(second_window,bg="#F0F0F0",bd=0, height=25, width=55,wrap=tk.WORD, font=("Calibri", 11)) 
         summary.insert(tk.END, feedback)
         
-        summary.grid(row=1,column=1, rowspan=2, padx=5, pady=5)                 
+        summary.grid(row=1,column=1, rowspan=2, padx=5, pady=2)                 
         
         
         sayok=tk.Button(second_window,text="OK",command=second_window.destroy)
         sayok.grid(row=5, column=2,columnspan=1, rowspan=2, padx=15, pady=15)
         
-        genletter=tk.Button(second_window, text="Click to save a letter", command=lambda: gen_letter.gen_letter(self.paydata)) 
-        genletter.grid(row=5, column=1,columnspan=1, rowspan=2, padx=15, pady=15)
-        
+        if self.paydata['deltapctstart'][len(self.paydata)-1]<=0:
+            genletter=tk.Button(second_window, text="Click to save a letter", command=lambda: gen_letter.gen_letter(self.paydata)) 
+            genletter.grid(row=5, column=1,columnspan=1, rowspan=2, padx=15, pady=15)
+            
         return second_window

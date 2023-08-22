@@ -20,7 +20,7 @@ def gen_letter(paydata):
     currpay=paydata['pay'][len(paydata['date'])-1]
     adjusted=paydata['adjusted'][len(paydata['date'])-1]
     
-    graph = InlineImage(tpl, image_descriptor=r"C:\Users\Matt0\Downloads\sad cat.jpg", width=Mm(45), height=Mm(70))
+    graph = InlineImage(tpl, image_descriptor="graph.png")
     
     
     context={'timeworked': timeworked, 

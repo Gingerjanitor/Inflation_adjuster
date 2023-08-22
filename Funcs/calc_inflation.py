@@ -46,6 +46,10 @@ class mixin:
         self.paydata['delta']=self.paydata['pay']-self.paydata['adjusted']
         self.paydata['deltapctstart']=((self.paydata['pay']/self.paydata['adjusted']-1)*100).round(2)
         self.paydata.set_index('date')
+        
+        #convert to hourly pay assuming 40hrs a week 50 a year. 
+        self.paydata['hourlyraw']=(self.paydata['pay']/50/40).round(2)
+        self.paydata['hourlyadj']=(self.paydata['adjusted']/50/40).round(2)
         print(self.paydata)
         
         print("Yippee!")

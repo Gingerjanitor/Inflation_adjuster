@@ -33,6 +33,7 @@ class mixin(resultswindow.mixin):
                            label="What your starting pay is now worth",
                            ax=axes[0])     
         line1.set(title="What you've been paid vs where you started")
+        line1.title.set_size(16)
         line1.set_ylabel("Pay in $")
         line1.xaxis.set_visible(False)
         
@@ -47,11 +48,14 @@ class mixin(resultswindow.mixin):
                            y=self.paydata['deltapctstart'], 
                            #Title="How much your pay has changed since hiring, inflation adjusted (%)",
                            marker="o",
-                           label='The % your pay has changed since 2016',
+                           label=f"The % your pay has changed since {self.paydata['date'][0].year}",
                            ax=axes[1])
-        line3.set_ylabel("% change since 2016")
+        line3.set_xlabel("Year")
+        line3.set_ylabel(f"% change since {self.paydata['date'][0].year}")
         line3.legend(loc="lower right")
         
+        
+        plt.savefig("graph.png",dpi=125)
         canvas=FigureCanvasTkAgg(plt.gcf(), master=second_window)
         canvas.draw()
         canvas.get_tk_widget().grid(row=1,column=2,rowspan=2)
