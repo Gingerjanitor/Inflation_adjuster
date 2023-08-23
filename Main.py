@@ -28,7 +28,6 @@ import Gui.resultswindow as resultswindow
 #6) Add a little forecast?
 #7 login and recall prior entries
 
-
 class inflation_app(validators.mixin, 
                     calc_inflation.mixin, 
                     report_results.mixin, 
@@ -38,6 +37,8 @@ class inflation_app(validators.mixin,
     ##when initialized, establish the GUI
     def __init__(self ,master):
         self.master=master
+        self.payentryfields={}
+        self.yearentryfields={}
         self.data_entry(master)
         self.yearlist=[]
         self.submissioncount=-1
@@ -45,12 +46,11 @@ class inflation_app(validators.mixin,
         self.cleanpay={}
         self.cleandate={}
         self.inflation=pd.DataFrame()
+
         
     def mainscript(self):
         error=self.checkdate()
-        #janky, but this ensures lastvalue is always added at the very end of everything.
-        #self.yearlist.append(self.lastvalue)
-        #self.indexlog.append(self.lastindex)
+
         print(self.yearlist)
         if error==True:
             return
