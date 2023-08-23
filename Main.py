@@ -39,6 +39,7 @@ class inflation_app(validators.mixin,
         self.master=master
         self.payentryfields={}
         self.yearentryfields={}
+        self.pleasesave=0
         self.data_entry(master)
         self.yearlist=[]
         self.submissioncount=-1
@@ -46,11 +47,10 @@ class inflation_app(validators.mixin,
         self.cleanpay={}
         self.cleandate={}
         self.inflation=pd.DataFrame()
-
         
     def mainscript(self):
         error=self.checkdate()
-
+# 
         print(self.yearlist)
         if error==True:
             return

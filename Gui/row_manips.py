@@ -22,7 +22,7 @@ class RowManips:
         ##new pay field
         self.newpayentry=tk.Entry(self.master)
         self.payentryfields[self.rownumber]=self.newpayentry
-        self.newpayentry.grid(row=self.rowloc, column=1, columnspan=2, pady=5, padx=40)
+        self.newpayentry.grid(row=self.rowloc, column=1, columnspan=2, pady=5, padx=60, sticky="e")
         
         #make teh remove button visible:
         
