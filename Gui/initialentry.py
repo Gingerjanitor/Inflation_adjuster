@@ -8,6 +8,7 @@ Created on Thu Aug 10 15:13:35 2023
 import tkinter as tk
 import datetime
 import Gui.row_manips as row_manips
+import Funcs.authentication as authentication
 
 class mixin(row_manips.RowManips):
     def data_entry(self, master): 
@@ -101,7 +102,7 @@ class mixin(row_manips.RowManips):
         
         #buttons
         #this still needs a command so it does something.
-        self.loadit=tk.Button(master, text="Load",)
+        self.loadit=tk.Button(master, text="Load",command= lambda: authentication.authenticate(self.logins ,self.username.get(), self.password.get()))
         self.loadit.grid(row=2,column=2,sticky="nsew", padx=5, pady=3)
         
         self.saveit=tk.Checkbutton(master,text="Check to save entries", variable=self.pleasesave, onvalue=1, offvalue=0)
