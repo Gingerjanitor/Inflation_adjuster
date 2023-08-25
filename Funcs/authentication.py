@@ -19,22 +19,16 @@ def authenticate(logins, username,password):
     
     if username in logins['account'].values:
         print("username matched")
-        matchsalt=logins['pwsalt'].loc[logins['account']==username].values[0]
-        matchpass=logins['password'].loc[logins['account']==username].values[0]
-        
-        encoded=bcrypt.hashpw(password.encode('utf-8'),matchsalt)
-        
-        if bcrypt.checkpw(encoded, matchpass):
-
-            print("they matched!")
-            
-        else:
-            print("UN matched, PW doesn't")
-        ###route to a "load data" function"
-            
+        stored_password = logins['password'].loc[logins['account'] == username].values[0]
+        print(password)
+        print(stored_password)
+        if str(password)==str(stored_password):
+            print("Matched!")
+            #initiate a loading of the prior person's data
     else:
         print("The Username or Password does not match")
         return False
+
 
 def register(username,password):
     pwsalt=bcrypt.gensalt()
