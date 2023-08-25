@@ -105,7 +105,7 @@ class mixin(row_manips.RowManips):
         self.loadit=tk.Button(master, text="Load",command= lambda: authentication.authenticate(self.logins ,self.username.get(), self.password.get()))
         self.loadit.grid(row=2,column=2,sticky="nsew", padx=5, pady=3)
         
-        self.saveit=tk.Checkbutton(master,text="Check to save entries", variable=self.pleasesave, onvalue=1, offvalue=0)
+        self.saveit=tk.Checkbutton(master,text="Check to save entries", variable=self.pleasesave)
         self.saveit.grid(row=1,column=2, sticky="nsew", padx=5, pady=3)
         
         self.submit=tk.Button(master, text="Submit", command=self.mainscript).grid(row=self.rowloc+99,column=0, columnspan=2)
@@ -125,6 +125,7 @@ class mixin(row_manips.RowManips):
         if activated.get() == "(--Current pay--)":
             activated.delete(0, tk.END)
             
+
     # def add_row(self, master):
     #     #self.master=master
     #     self.rownumber+=1

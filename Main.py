@@ -15,6 +15,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
 from urllib.error import URLError
 
+import Funcs.savedata as savedata
 import Funcs.Prep_data as prep_data
 import Funcs.validators as validators
 import Funcs.calc_inflation as calc_inflation
@@ -33,15 +34,18 @@ class inflation_app(validators.mixin,
                     report_results.mixin, 
                     initialentry.mixin, 
                     resultswindow.mixin,
-                    prep_data.mixin):
+                    prep_data.mixin,
+                    savedata.mixin):
     ##when initialized, establish the GUI
     def __init__(self ,master):
         self.master=master
         self.logins=pd.read_csv("logins.csv")
         self.payentryfields={}
         self.yearentryfields={}
-        self.pleasesave=0
+        self.pleasesave=tk.IntVar()
+        
         self.data_entry(master)
+        
         self.yearlist=[]
         self.submissioncount=-1
         self.error=False
@@ -60,6 +64,7 @@ class inflation_app(validators.mixin,
         if self.error==True:
             return
         else:
+            self.save_user()
             self.prep_data()
             self.inflation_adj()
             
