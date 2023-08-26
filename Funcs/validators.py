@@ -9,6 +9,8 @@ class mixin:
         self.badpay.grid_forget()
         self.worddate.grid_forget()
         self.baddate.grid_forget()
+        self.badacct.grid_forget()
+
         for index, yearentry in self.yearentryfields.items():
             #checking for if it was already entered by first atching index and then
             if index in self.cleandate.keys(): 

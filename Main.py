@@ -18,6 +18,7 @@ from urllib.error import URLError
 import Funcs.savedata as savedata
 import Funcs.Prep_data as prep_data
 import Funcs.validators as validators
+import Funcs.authentication as authentication
 import Funcs.calc_inflation as calc_inflation
 import Funcs.report_results as report_results
 import Gui.initialentry as initialentry
@@ -31,7 +32,8 @@ import Gui.resultswindow as resultswindow
 
 class inflation_app(validators.mixin, 
                     calc_inflation.mixin, 
-                    report_results.mixin, 
+                    report_results.mixin,
+                    authentication.mixin,
                     initialentry.mixin, 
                     resultswindow.mixin,
                     prep_data.mixin,

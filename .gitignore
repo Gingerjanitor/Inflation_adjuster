@@ -1,5 +1,10 @@
 /__pycache__
 /Funcs/__pycache__
+\Funcs\__pycache__
+
 /Gui/__pycache__
 /.spyproject
 config.py
+userdata.json
+Funcs/__pycache__/calc_inflation.cpython-310.pyc
+Funcs/__pycache__/validators.cpython-310.pyc

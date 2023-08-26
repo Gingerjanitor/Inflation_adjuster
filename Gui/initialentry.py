@@ -52,6 +52,7 @@ class mixin(row_manips.RowManips):
         #self.askcurrpay.grid(row=4,column=2)
         
         #Error labels for call later
+        self.badacct=tk.Label(master,text="User/password combo invalid", justify="center",fg="red")
         self.baddate=tk.Label(master,text="The year provided is invalid", justify="center", fg="red")
         self.worddate=tk.Label(master,text="The year entered has non-numeric characters",justify="center", fg="red")
         self.badpay=tk.Label(master,text="The pay values must be numeric", \
@@ -102,7 +103,7 @@ class mixin(row_manips.RowManips):
         
         #buttons
         #this still needs a command so it does something.
-        self.loadit=tk.Button(master, text="Load",command= lambda: authentication.authenticate(self.logins ,self.username.get(), self.password.get()))
+        self.loadit=tk.Button(master, text="Load",command= self.authenticate)
         self.loadit.grid(row=2,column=2,sticky="nsew", padx=5, pady=3)
         
         self.saveit=tk.Checkbutton(master,text="Check to save entries", variable=self.pleasesave)
