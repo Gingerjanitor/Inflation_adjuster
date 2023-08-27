@@ -29,10 +29,11 @@ class mixin:
                     self.inflation=fred.get_series('CPIAUCNS', self.paydata.index[0], self.paydata.index[len(self.paydata)-1],name="inflation")
                     break
                 except URLError:
-                    if retry>5:
+                    print(retry)
+                    if retry>=5:
                         self.timeout.grid(row=96,column=0, columnspan = 4)
                         print("no connection happened")
-                        return
+                        break
                     print("failed, trying again")
                     time.sleep(2)
                     retry+=1

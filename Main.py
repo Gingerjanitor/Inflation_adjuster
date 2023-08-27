@@ -21,6 +21,7 @@ import Funcs.validators as validators
 import Funcs.authentication as authentication
 import Funcs.calc_inflation as calc_inflation
 import Funcs.report_results as report_results
+import Funcs.load_data as load_data
 import Gui.initialentry as initialentry
 import Gui.resultswindow as resultswindow
 
@@ -37,7 +38,8 @@ class inflation_app(validators.mixin,
                     initialentry.mixin, 
                     resultswindow.mixin,
                     prep_data.mixin,
-                    savedata.mixin):
+                    savedata.mixin,
+                    load_data.mixin):
     ##when initialized, establish the GUI
     def __init__(self ,master):
         self.master=master
