@@ -8,6 +8,54 @@ import json
 import tkinter as tk
 class mixin:
     def load_data(self):
+        ######clean space
+        
+        
+        ##need to fully reset the row space and entries in case you load a new account that has fewer entries. 
+        ###
+
+        while self.rownumber>0:
+            ##delete the date field
+            toremove=self.yearentryfields[self.rownumber]
+            toremove.destroy()
+            del self.yearentryfields[self.rownumber]
+            
+            ##delete the pay field
+            toremove=self.payentryfields[self.rownumber]
+            toremove.destroy()
+            del self.payentryfields[self.rownumber]
+           
+            
+            try:
+                #remove the stored data from the dictionaries and list
+                #print(self.cleandate)
+                #print(f'yearlist has {self.yearlist}, want to remove {self.cleandate[self.rownumber]}')
+                if self.cleandate[self.rownumber] in self.yearlist:
+                    self.yearlist.remove(self.cleandate[self.rownumber])
+                if self.rownumber in self.cleandate.keys():
+                    self.cleandate.pop(self.rownumber)
+                
+                #ditto for pay info
+                if self.rownumber in self.cleanpay.keys():
+                    self.cleanpay.pop(self.rownumber)
+                if self.rownumber in self.payentryfields.keys():
+                    self.payentryfields.pop(self.rownumber)
+            
+            except KeyError:
+                pass
+            #allowing the key error through since it probably means they left a entry field blank, then deleted.
+            #except KeyError:
+            #    pass
+            
+            #decrement
+            print(self.rownumber)
+            self.rownumber-=1
+            self.rowloc-=1
+            print(self.rownumber)
+        
+        
+        
+        ######laod it and prepare
         with open("userdata.json","r") as location:
             loaded=json.load(location)
             
@@ -22,8 +70,8 @@ class mixin:
         self.cleanpay={int(index):values for (index,values) in temppay.items()}
         
         
-        ##need to fully reset the row space and entries in case you load a new account that has fewer entries. 
-        ###
+        
+        ########populate the rows
         self.e1.delete(0,tk.END)
         self.e1.insert(0, self.cleandate[0])
         self.e2.delete(0,tk.END)
