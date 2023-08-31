@@ -8,3 +8,8 @@ config.py
 userdata.json
 Funcs/__pycache__/calc_inflation.cpython-310.pyc
 Funcs/__pycache__/validators.cpython-310.pyc
+Funcs/__pycache__/calc_inflation.cpython-310.pyc
+Funcs/__pycache__/validators.cpython-310.pyc
+graph.png
+Gui/__pycache__/initialentry.cpython-310.pyc
+Gui/__pycache__/row_manips.cpython-310.pyc
