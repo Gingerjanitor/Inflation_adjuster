@@ -45,7 +45,6 @@ class mixin:
 
             
             if index!=100:
-
                 yearentry=yearentry.get()
                 ###CHECK THAT IT IS INT
                 try:
@@ -70,7 +69,7 @@ class mixin:
                         #hide the error if there was one
                         self.baddate.grid_forget()
                         
-                        if self.submissioncount==0 & index!=100:
+                        if self.submissioncount==0:
                             #add the year value to a list to later check if they were entered sequentially)
                             self.yearlist.append(yearentry)
                             #update the dict to include the year of the tk stuff
@@ -91,7 +90,7 @@ class mixin:
                             print("\n checking if lower than prior date\n")
                             print(self.cleandate[index])
                             print(self.cleandate.values())
-
+    
                                 
                         #if they've hit submit, but they never got current year in the list.# fringe case.
                         #elif self.submissioncount>0 & (datetime.date.today().year not in self.yearlist):
@@ -103,6 +102,7 @@ class mixin:
         ##tack on the current date at the end of the list if it's not there.
         if int(self.yearentryfields[100].get()) not in self.yearlist:
             self.yearlist.append(int(self.yearentryfields[100].get()))
+            self.cleandate[100]=int(self.yearentryfields[100].get())
 
             
         ###CHECK that dates are entered in linear sequence
@@ -117,7 +117,9 @@ class mixin:
                     self.outofsequence.grid(row=96,column=0,columnspan=4)
                     return
         ###everything passed!
-        print(self.yearentryfields)
+        print("\nthese are the years entered\n")
+        print(self.yearlist)
+        print(self.cleandate)
                     
         
     def checkpay(self):

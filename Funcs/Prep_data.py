@@ -4,6 +4,7 @@ import datetime
 
 class mixin:
         def prep_data(self):
+            print("cleandate at the start of prepdata")
             print(self.cleandate)
             for index,date in self.cleandate.items():
                 if len(str(date))>=5:
