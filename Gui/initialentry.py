@@ -53,7 +53,7 @@ class mixin(row_manips.RowManips):
         self.badacct=tk.Label(master,text="User/password combo invalid", justify="center",fg="red")
         self.baddate=tk.Label(master,text="The year provided is invalid", justify="center", fg="red")
         self.worddate=tk.Label(master,text="The year entered has non-numeric characters",justify="center", fg="red")
-        self.badpay=tk.Label(master,text="The pay values must be numeric", \
+        self.badpay=tk.Label(master,text="The pay values cannot be empty, must be numeric", \
                  justify="center", fg="red")
         self.timeout=tk.Label(master,text="There was a server error. Try again.", justify="center", fg="red")
         self.outofsequence=tk.Label(master,text="The years must be in order", \
