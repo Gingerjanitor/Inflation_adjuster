@@ -4,12 +4,13 @@ import datetime
 
 class mixin:
         def prep_data(self):
+            print("cleandate at the start of prepdata")
             print(self.cleandate)
             for index,date in self.cleandate.items():
                 if len(str(date))>=5:
                     continue
-                if index==100:
-                    self.cleandate[index]=str(f"{datetime.date.today().year}"+"-1-1")
+                #if index==100:
+                #    self.cleandate[index]=str(f"{datetime.date.today().year}"+"-1-1")
                 else:
                     newdate=str(date)+"-1-1"
                     self.cleandate[index]=newdate

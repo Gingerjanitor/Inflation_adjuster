@@ -63,7 +63,7 @@ class mixin:
         #resetting keys to int form
         self.cleandate={int(index):values for (index,values) in tempdate.items()}
         #must reset the 2023, since it gets cleaned up a little bit.
-        self.cleandate[100]="2023"
+        #self.cleandate[100]="2023"
         
         #doing same for pay data
         temppay=loaded[self.username.get()][0]['pay']
@@ -78,11 +78,13 @@ class mixin:
         self.e2.insert(0, self.cleanpay[0])
         self.e3.delete(0,tk.END)
         self.e3.insert(0, self.cleanpay[100])
+        self.curryear.delete(0,tk.END)
+        self.curryear.insert(0, self.cleandate[100])
         print("loaded")
         
         ##
         for index,value in self.cleanpay.items():
-            if (index!=0) and (index!=100):
+            if (index!=0) & (index!=100):
                 self.genpayrows(value)
                 self.gendaterows(self.cleandate[index])
 

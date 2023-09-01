@@ -44,9 +44,7 @@ class mixin(row_manips.RowManips):
         self.askstartpay=tk.Label(master, text="Salary $")
         self.askstartpay.grid(row=5,column=2, columnspan=2, pady=5, padx=20, sticky="w")
         
-        #autofill current date slot
-        self.curryear=tk.Label(master,text=f"{datetime.date.today().year}")
-        self.curryear.grid(row=self.rowloc+25, columnspan=2, column=0, pady=5, padx=5,)
+        
         
         #self.askcurrpay=tk.Label(master, text="Current salary $")
         #self.askcurrpay.grid(row=4,column=2)
@@ -78,6 +76,11 @@ class mixin(row_manips.RowManips):
         self.e1.bind('<FocusIn>', lambda event: self.remove_initial_text(self.e1))
         self.yearentryfields[self.rownumber]=self.e1
         
+        
+        #autofill current date slot
+        self.curryear=tk.Entry(master) 
+        self.curryear.insert(0, f"{datetime.date.today().year}")
+        self.curryear.grid(row=self.rowloc+25, columnspan=2, column=0, pady=5, padx=5,)
     
         #start pay entry
         self.e2 = tk.Entry(master)
@@ -99,7 +102,7 @@ class mixin(row_manips.RowManips):
         
         #final year entry field
         #this is for logging the current year
-        self.yearentryfields[self.rownumber+100]=datetime.date.today().year
+        self.yearentryfields[self.rownumber+100]=self.curryear
         
         #buttons
         #this still needs a command so it does something.

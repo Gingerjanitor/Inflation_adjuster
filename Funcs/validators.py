@@ -27,22 +27,24 @@ class mixin:
                     #remove the value from the list tracker
                     print(f"i wanna remove {self.cleandate[index]} its not int")
                     #this manages the chance that you added a new row, caused an error, and then corrected
-                    if index==100:
-                        continue
-                    if len(self.yearlist)<=index:
-                        del self.yearlist[index]
+                    #if index==100:
+                    #    continue
+                    print("notice me")
+                    print(len(self.yearlist))
+                    print(index)
+                 #   if len(self.yearlist)<=index:
+                 #       del self.yearlist[index]
                     pass
             #this detects the current date, which alwys shows up in the 2nd slot of the dictionary, but must
             #appear at the end of the list later.
-            if yearentry==datetime.date.today().year:
-                self.cleandate[index]=yearentry
-                continue
+            #if yearentry==datetime.date.today().year:
+            #    self.cleandate[index]=yearentry
+            #    continue
             #If they entered values, then added a row and more values, it would break.
             #This fixes it.
 
             
-            if yearentry!=datetime.date.today().year:
-
+            if index!=100:
                 yearentry=yearentry.get()
                 ###CHECK THAT IT IS INT
                 try:
@@ -88,18 +90,19 @@ class mixin:
                             print("\n checking if lower than prior date\n")
                             print(self.cleandate[index])
                             print(self.cleandate.values())
-
+    
                                 
                         #if they've hit submit, but they never got current year in the list.# fringe case.
-                        elif self.submissioncount>0 & (datetime.date.today().year not in self.yearlist):
-                            print("trying to fix this thing")
-                            self.yearlist.insert(index,yearentry)
-                            self.yearlist.append(datetime.date.today().year)
+                        #elif self.submissioncount>0 & (datetime.date.today().year not in self.yearlist):
+                        #    print("trying to fix this thing")
+                        #    self.yearlist.insert(index,yearentry)
+                        #    self.yearlist.append(datetime.date.today().year)
                         
                             
         ##tack on the current date at the end of the list if it's not there.
-        if datetime.date.today().year not in self.yearlist:
-            self.yearlist.append(datetime.date.today().year)
+        if int(self.yearentryfields[100].get()) not in self.yearlist:
+            self.yearlist.append(int(self.yearentryfields[100].get()))
+            self.cleandate[100]=int(self.yearentryfields[100].get())
 
             
         ###CHECK that dates are entered in linear sequence
@@ -108,12 +111,15 @@ class mixin:
             if index!=0:
             #if the years are equal, or the current year is less than the prior 
             #year, we have a sequence entered out of order.
-            
+                print("issue is HERE")
+                print(self.yearlist[index-1])
                 if year<=self.yearlist[index-1]:
                     self.outofsequence.grid(row=96,column=0,columnspan=4)
                     return
         ###everything passed!
-        print(self.yearentryfields)
+        print("\nthese are the years entered\n")
+        print(self.yearlist)
+        print(self.cleandate)
                     
         
     def checkpay(self):
