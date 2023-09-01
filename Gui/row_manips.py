@@ -4,9 +4,9 @@ class RowManips:
     def add_row(self):
         #self.master=master
         #add the remove button if this is the first add:
-        if self.rownumber==0:
+        if self.rownumber==2:
             self.removebutton=tk.Button(self.master,text="Remove a year", command=self.remove_row)
-            self.removebutton.grid(row=self.rowloc+98, column=1, columnspan=2, pady=15)
+            self.removebutton.grid(row=self.rowloc+96, column=2, columnspan=1, pady=5, padx=10, sticky="w")
 
         
         self.rownumber+=1
@@ -32,7 +32,7 @@ class RowManips:
         print(self.yearentryfields)
         if self.rownumber in self.yearentryfields.keys():
             print(self.rownumber)
-            if self.rownumber>0:
+            if self.rownumber>2:
                 print("removing {self.rownumber}")
                 
                 ##delete the date field
@@ -73,7 +73,7 @@ class RowManips:
                 self.rowloc-=1
                 print(self.rownumber)
                 
-            if self.rownumber==0:
+            if self.rownumber==2:
                 print(self.removebutton)
                 print("want to remove the button")
                 self.removebutton.destroy()

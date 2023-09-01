@@ -17,7 +17,7 @@ class mixin(row_manips.RowManips):
         
         ###setting this row tracker, which marks where the button stuff starts
         self.rowloc=6
-        self.rownumber=0
+        self.rownumber=-1
         
         #establish and place startup labels
         #username
@@ -68,41 +68,52 @@ class mixin(row_manips.RowManips):
         self.password.grid(row=2,column=1, sticky="w")
         
         
-        #year entry
-        self.e1 = tk.Entry(master)
-        self.e1.insert(0, "(--Start year--)")
-        self.e1.grid(row=6,column=0, columnspan=2,)
-        #establish behavior when clicked on, auto wipe contents
-        self.e1.bind('<FocusIn>', lambda event: self.remove_initial_text(self.e1))
-        self.yearentryfields[self.rownumber]=self.e1
+        ###generate the first two row fields
+        self.add_row()
+        self.yearentryfields[0].insert(0,"Ex: 2003")
+        self.yearentryfields[0].bind('<FocusIn>', lambda event: self.remove_initial_text(self.yearentryfields[0]))
+
+        self.payentryfields[0].insert(0, "Ex: 52000")
+        self.payentryfields[0].bind('<FocusIn>', lambda event: self.remove_initial_text(self.payentryfields[0]))
+
+        self.add_row()
         
         
-        #autofill current date slot
-        self.curryear=tk.Entry(master) 
-        self.curryear.insert(0, f"{datetime.date.today().year}")
-        self.curryear.grid(row=self.rowloc+25, columnspan=2, column=0, pady=5, padx=5,)
+        # #year entry
+        # self.e1 = tk.Entry(master)
+        # self.e1.insert(0, "(--Start year--)")
+        # self.e1.grid(row=6,column=0, columnspan=2,)
+        # #establish behavior when clicked on, auto wipe contents
+        # self.e1.bind('<FocusIn>', lambda event: self.remove_initial_text(self.e1))
+        # self.yearentryfields[self.rownumber]=self.e1
+        
+        
+        # #autofill current date slot
+        # self.curryear=tk.Entry(master) 
+        # self.curryear.insert(0, f"{datetime.date.today().year}")
+        # self.curryear.grid(row=self.rowloc+25, columnspan=2, column=0, pady=5, padx=5,)
     
-        #start pay entry
-        self.e2 = tk.Entry(master)
-        self.e2.insert(0,"(--Starting pay--)")
-        self.e2.grid(row=6,column=1, columnspan=2, pady=5, padx=60, sticky="e")
-        self.e2.bind('<FocusIn>', lambda event: self.remove_initial_text(self.e2))
+        # #start pay entry
+        # self.e2 = tk.Entry(master)
+        # self.e2.insert(0,"(--Starting pay--)")
+        # self.e2.grid(row=6,column=1, columnspan=2, pady=5, padx=60, sticky="e")
+        # self.e2.bind('<FocusIn>', lambda event: self.remove_initial_text(self.e2))
 
-        self.payentryfields[self.rownumber]=self.e2
+        # self.payentryfields[self.rownumber]=self.e2
         
-        #current pay entry
-        self.e3 = tk.Entry(master)
-        self.e3.insert(0,"(--Current pay--)")
-        self.e3.grid(row=self.rowloc+25,column=1, columnspan=2, pady=5, padx=60, sticky="e")
-        self.e3.bind('<FocusIn>', lambda event: self.remove_initial_text(self.e3))
+        # #current pay entry
+        # self.e3 = tk.Entry(master)
+        # self.e3.insert(0,"(--Current pay--)")
+        # self.e3.grid(row=self.rowloc+25,column=1, columnspan=2, pady=5, padx=60, sticky="e")
+        # self.e3.bind('<FocusIn>', lambda event: self.remove_initial_text(self.e3))
 
-        #final pay entry field
-        #setting the rownumber absurdly high so that it doesn't get overwritten by new rows
-        self.payentryfields[self.rownumber+100]=self.e3
+        # #final pay entry field
+        # #setting the rownumber absurdly high so that it doesn't get overwritten by new rows
+        # self.payentryfields[self.rownumber+100]=self.e3
         
-        #final year entry field
-        #this is for logging the current year
-        self.yearentryfields[self.rownumber+100]=self.curryear
+        # #final year entry field
+        # #this is for logging the current year
+        # self.yearentryfields[self.rownumber+100]=self.curryear
         
         #buttons
         #this still needs a command so it does something.
@@ -116,18 +127,17 @@ class mixin(row_manips.RowManips):
         
         self.endit=tk.Button(master,text="Quit", command=master.destroy,).grid(row=self.rowloc+99,column=1,columnspan=2, pady=5, padx=100, sticky="e")
         
-        self.rowadd=tk.Button(master,text="Add another year", command=self.add_row).grid(row=self.rowloc+98, column=0, columnspan=2, pady=5, padx=60,)
+        self.rowadd=tk.Button(master,text="Add another year", command=self.add_row).grid(row=self.rowloc+96, column=0, columnspan=2, pady=5, padx=60,)
         
         ###maybe make this only show up if row number >0?
         #self.rowadd=tk.Button(master,text="Remove a year", command=self.remove_row).grid(row=self.rowloc+98, column=2, columnspan=1, pady=15)
         
     def remove_initial_text(self, activated):
-        if activated.get() == "(--Start year--)":
+        if activated.get() == "Ex: 2003":
             activated.delete(0, tk.END)
-        if activated.get() == "(--Starting pay--)":
+        if activated.get() == "Ex: 52000":
             activated.delete(0, tk.END)
-        if activated.get() == "(--Current pay--)":
-            activated.delete(0, tk.END)
+
             
 
     # def add_row(self, master):
