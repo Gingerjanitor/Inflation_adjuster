@@ -8,3 +8,4 @@ config.py
 userdata.json
 Funcs/__pycache__/calc_inflation.cpython-310.pyc
 Funcs/__pycache__/validators.cpython-310.pyc
+graph.png
