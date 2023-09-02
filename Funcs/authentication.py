@@ -18,11 +18,11 @@ class mixin:
         if self.username.get() in self.logins['account'].values:
             print("username matched")
             stored_password = self.logins['password'].loc[self.logins['account'] == self.username.get()].values[0]
-
+            print(self.password.get())
             if str(self.password.get())==str(stored_password):
                 print("Matched!")
                 self.load_data()
         else:
-            self.badacct.grid(row=96,column=0, columnspan = 4)
+            self.badacct.grid(row=98,column=0, columnspan = 4)
             print("The Username or Password does not match")
             return False

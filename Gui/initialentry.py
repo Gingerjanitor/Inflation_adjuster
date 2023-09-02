@@ -64,7 +64,7 @@ class mixin(row_manips.RowManips):
         self.username=tk.Entry(master, justify="left",)
         self.username.grid(row=1,column=1,sticky="w")
         
-        self.password=tk.Entry(master)
+        self.password=tk.Entry(master, show="*")
         self.password.grid(row=2,column=1, sticky="w")
         
         

@@ -13,9 +13,11 @@ class mixin:
         
         ##need to fully reset the row space and entries in case you load a new account that has fewer entries. 
         ###
-
-        while self.rownumber>0:
+        print("rownumber")
+        print(self.rownumber)
+        while self.rownumber>-1:
             ##delete the date field
+            print(self.rownumber)
             toremove=self.yearentryfields[self.rownumber]
             toremove.destroy()
             del self.yearentryfields[self.rownumber]
@@ -70,29 +72,32 @@ class mixin:
         self.cleanpay={int(index):values for (index,values) in temppay.items()}
         
         
-        
+
+
         ########populate the rows
-        self.e1.delete(0,tk.END)
-        self.e1.insert(0, self.cleandate[0])
-        self.e2.delete(0,tk.END)
-        self.e2.insert(0, self.cleanpay[0])
-        self.e3.delete(0,tk.END)
-        self.e3.insert(0, self.cleanpay[100])
-        self.curryear.delete(0,tk.END)
-        self.curryear.insert(0, self.cleandate[100])
-        print("loaded")
+        # self.e1.delete(0,tk.END)
+        # self.e1.insert(0, self.cleandate[0])
+        # self.e2.delete(0,tk.END)
+        # self.e2.insert(0, self.cleanpay[0])
+        # self.e3.delete(0,tk.END)
+        # self.e3.insert(0, self.cleanpay[100])
+        # self.curryear.delete(0,tk.END)
+        # self.curryear.insert(0, self.cleandate[100])
+        # print("loaded")
         
         ##
-        for index,value in self.cleanpay.items():
-            if (index!=0) & (index!=100):
-                self.genpayrows(value)
-                self.gendaterows(self.cleandate[index])
-
-    
-    def genpayrows(self, value):
-        self.rownumber+=1
-        self.rowloc+=1
+        #self.rowloc=6
+        #self.rownumber=-1
         
+        for index,value in self.cleanpay.items():
+            self.genpayrows(value)
+            self.gendaterows(self.cleandate[index])
+            if self.rownumber<len(self.cleanpay.items())-2:
+                self.rownumber+=1
+                self.rowloc+=1
+        print("rownum after loading")
+        print(self.rownumber)
+    def genpayrows(self, value):
         self.newpayentry=tk.Entry(self.master)
         self.payentryfields[self.rownumber]=self.newpayentry
         self.newpayentry.grid(row=self.rowloc, column=1, columnspan=2, pady=5, padx=60, sticky="e")

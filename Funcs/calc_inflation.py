@@ -21,22 +21,21 @@ class mixin:
         fred = Fred(api_key=fredkey)
         retry=0
         #inflation=pd.DataFrame()
-        print(self.inflation)
-        if self.inflation.empty:
-            print("pinging API")
-            while retry<=5:
-                try:
-                    self.inflation=fred.get_series('CPIAUCNS', self.paydata.index[0], self.paydata.index[len(self.paydata)-1],name="inflation")
+
+        print("pinging API")
+        while retry<=5:
+            try:
+                self.inflation=fred.get_series('CPIAUCNS', self.paydata.index[0], self.paydata.index[len(self.paydata)-1],name="inflation")
+                break
+            except URLError:
+                print(retry)
+                if retry>=5:
+                    self.timeout.grid(row=96,column=0, columnspan = 4)
+                    print("no connection happened")
                     break
-                except URLError:
-                    print(retry)
-                    if retry>=5:
-                        self.timeout.grid(row=96,column=0, columnspan = 4)
-                        print("no connection happened")
-                        break
-                    print("failed, trying again")
-                    time.sleep(2)
-                    retry+=1
+                print("failed, trying again")
+                time.sleep(2)
+                retry+=1
                 
         self.inflationadjstart=pd.DataFrame(self.paydata['pay'][0]*(self.inflation/self.inflation[0])).round(2)
         self.inflationadjstart=self.inflationadjstart.rename(columns={0:"adjusted"})

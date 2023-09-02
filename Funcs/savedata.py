@@ -13,7 +13,7 @@ class mixin:
             if self.username.get() not in self.logins['account'].values:
                 print("new user entered")
                 account= self.username.get()
-                password=self.password.get()
+                password=str(self.password.get())
                 #gen random ID that will be used as linkage point.
                 
                 newlogs=pd.DataFrame()
@@ -24,7 +24,7 @@ class mixin:
                 
                 self.logins=pd.concat([self.logins,newlogs],axis=0)
                 self.logins=pd.concat([self.logins], axis=1)
-                self.logins=self.logins.reset_index(drop=True)        
+                self.logins=self.logins.set_index("account")        
                 self.logins.to_csv("logins.csv")
                 
                 ##Save the data

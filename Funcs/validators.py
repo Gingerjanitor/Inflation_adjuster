@@ -51,7 +51,7 @@ class mixin:
             #year, we have a sequence entered out of order.
                 print(self.yearlist[index-1])
                 if year<=self.yearlist[index-1]:
-                    self.outofsequence.grid(row=96,column=0,columnspan=4)
+                    self.outofsequence.grid(row=98,column=0,columnspan=4)
                     return
         ###everything passed!
         print("\nthese are the years entered\n")
@@ -93,7 +93,7 @@ class mixin:
                # else:
                 self.cleanpay[index]=pay
             except (TypeError,ValueError):
-                self.badpay.grid(row=96,column=0, columnspan = 4)
+                self.badpay.grid(row=98,column=0, columnspan = 4)
                 self.error=True
                 
             else:
