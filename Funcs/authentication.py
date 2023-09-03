@@ -4,6 +4,7 @@ Created on Wed Aug 23 19:47:38 2023
 
 @author: Matt0
 """
+import pandas as pd
 class mixin:
     def authenticate(self):
     
@@ -14,6 +15,7 @@ class mixin:
         #hashed_PW=bcrypt.hashpw(password.encode('utf-8'),pwsalt)
         #print(hashed_PW)
         self.badacct.grid_forget()
+        self.logins=pd.read_csv("logins.csv")
 
         if self.username.get() in self.logins['account'].values:
             print("username matched")

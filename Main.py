@@ -43,7 +43,6 @@ class inflation_app(validators.mixin,
     ##when initialized, establish the GUI
     def __init__(self ,master):
         self.master=master
-        self.logins=pd.read_csv("logins.csv")
         self.payentryfields={}
         self.yearentryfields={}
         self.pleasesave=tk.IntVar()
